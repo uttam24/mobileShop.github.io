@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stye.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" >
+</head>
+<body>
+    <nav class="navbar  navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        MobileCart
+      </a>
+      
+    </div>
+     <div class="header-cart float-right">
+           <i class="fa fa-cart-plus" aria-hidden="true"></i>
+          <!--   <span class="cart_item">0</span> -->
+         </div>
+  </div>
+</nav>
+    
+
+    <div class="container">
+        <div class="row">
+        <div class="productContainer col-xs-12 col-md-4">
+            <div class="innerDiv">
+            <div class="productImage">
+                <img src="https://media.croma.com/image/upload/f_auto,q_auto,d_Croma%20Assets:no-product-image.jpg,h_260,w_260/v1605282376/Croma%20Assets/Communication/Mobiles/Images/8831447990302.jpg" class='img img-responsive'>
+            </div>
+            <div class="productTitle">
+                <h3>Iphone 5</h3>
+            </div>
+            <div class="productPrice">
+                <h3>&#8377;12,000</h3>
+            </div>
+            <div class="addToCartBtn">
+                Add to Cart
+            </div>
+        </div>
+        </div>
+        <div class="productContainer col-xs-12 col-md-4">
+            <div class="innerDiv">
+            <div class=" productImage">
+                <img src="images/Redmi-9C.jpg" class='img img-responsive'>
+            </div>
+            <div class=" productTitle">
+                <h3>Redmi 9</h3>
+            </div>
+            <div class=" productPrice">
+                <h3>&#8377;9,000</h3>
+            </div>
+            <div class="addToCartBtn">
+                Add to Cart
+            </div>
+        </div>
+        </div>
+        <div class="productContainer col-xs-12 col-md-4">
+            <div class="innerDiv">
+            <div class=" productImage">
+                <img src="images/2.jpg" class='img img-responsive' >
+            </div>
+            <div class=" productTitle">
+                <h3>Iphone 6</h3>
+            </div>
+            <div class=" productPrice">
+                <h3>&#8377;18,000</h3>
+            </div>
+            <div class="addToCartBtn">
+                Add to Cart
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="cartContainer">
+        <div class="row">
+            <div class="col-xs-3 heading"> Product</div>
+            <div class="col-xs-3 heading"> Title</div>
+            <div class="col-xs-3 heading"> Price</div>
+            <div class="col-xs-3 heading">Action</div>
+        </div>
+
+    </div>
+
+    <div class="row totalPrice">
+        <div class="col-xs-3 "> </div>
+        <div class="col-xs-3 "> </div>
+
+        <div class="col-xs-3 headingTop"> Total &#8377;</div>
+        <div class="col-xs-3 headingTop cartTotalPrice"> 0</div>
+    </div>
+    
+    </div>
+</body>
+<script type="text/javascript">
+    let addToCartBtn = document.getElementsByClassName('addToCartBtn');
+    var cartContainer = document.getElementsByClassName('cartContainer')[0];
+
+    for (let i=0; i<addToCartBtn.length; i++){
+        addToCartBtn[i].addEventListener('click', updateCartValue);
+    }
+    
+    function updateCartValue(e){
+       addtoCartbtnval = e.target;
+       productContainer = addtoCartbtnval.parentElement;
+       productTitle = productContainer.getElementsByClassName('productTitle')[0].innerText;
+       productPrice = productContainer.getElementsByClassName('productPrice')[0].innerText;
+       productImage = productContainer.getElementsByClassName('img')[0].src;
+       cartTitle = cartContainer.getElementsByClassName('cartTitle');
+
+        // if(cart_item.innerHTML >= 3){
+        //   cart_item.innerHTML = 3;
+        // }
+       
+       for(var i =0; i<cartTitle.length; i++){
+        if(cartTitle[i].innerText == productTitle){
+            alert('already produced addded');
+            return;
+        }
+       }
+
+       AddnewRowinCart(productTitle,productPrice,productImage);
+       var totalPrice = 0;
+       var cartPrice =document.getElementsByClassName('cartPrice');
+        for(var i =0; i<cartPrice.length; i++){
+           totalPrice = totalPrice + parseInt(cartPrice[i].innerText.replace('₹','').replace(',',''));
+           console.log(totalPrice)
+        }
+       document.getElementsByClassName('cartTotalPrice')[0].innerText=new Number(totalPrice).toLocaleString('en');
+    }
+    
+    function AddnewRowinCart(){
+        div = document.createElement("div");
+        div.classList.add('row');
+        insideDivContent =`<div class="col-xs-12 col-md-3 cartImage"> <img src='${productImage}''></div>
+            <div class="col-xs-12 col-md-3 cartTitle"> ${productTitle}</div>
+            <div class="col-xs-12 col-md-3 cartPrice"> ${productPrice}</div>
+            <div class="col-xs-12 col-md-3 removeButton">Remove</div>`
+        div.innerHTML =  insideDivContent;  
+        cartContainer.appendChild(div) 
+
+        var removeButton = document.getElementsByClassName('removeButton');
+
+        for(var x = 0; x<removeButton.length; x++){
+            removeButton[x].addEventListener('click', removeCartValue);
+        }
+    }
+    function removeCartValue(e){
+        e.target.parentElement.remove();
+        updatePriceAfterRemove();
+    }
+    function updatePriceAfterRemove(){
+        totalPrice = 0;
+        cartPrice = cartContainer.getElementsByClassName('cartPrice');
+        for (var i = 0; i < cartPrice.length; i++) {
+            priceFormatedNumb = cartPrice[i].innerText.replace('₹', '').replace(',', '');
+            totalPrice = totalPrice + parseInt((priceFormatedNumb));
+        }
+        document.getElementsByClassName('cartTotalPrice')[0].innerText = new Number(totalPrice).toLocaleString('en');
+    }
+</script>
+</html>
+
